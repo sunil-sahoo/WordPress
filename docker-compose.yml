@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  mysql:
+    container_name: mariadb
+    image: mariadb
+    ports:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mariaSql
+      MYSQL_DATABASE: jigoshop
+    restart: always
+
+  web:
+    container_name: jigoshop
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: jigoshop_web
+    environment:
+      DB_PASSWD: mariaSql
+      DB_NAME: jigoshop
+      DB_SERVER: mariadb
+    ports:
+      - "80:80"
+    links:
+      - mysql:database
+    volumes:
+      - .:/var/www/html/
+    restart: always
